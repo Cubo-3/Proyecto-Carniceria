@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/db.php';
+require_once __DIR__ . '/includes/db.php';
 try {
     $stmt = $pdo->query("SELECT id, nombre_corte, imagen FROM productos");
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);

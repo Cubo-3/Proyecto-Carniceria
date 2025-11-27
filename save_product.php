@@ -1,5 +1,5 @@
 <?php
-// save_product.php
+
 session_start();
 require_once 'includes/db.php';
 
@@ -9,7 +9,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Recibir y sanear datos
+
     $nombre_corte = trim($_POST['nombre_corte']);
     $id_tipo = filter_input(INPUT_POST, 'id_tipo', FILTER_VALIDATE_INT);
     $precio_kilo = filter_input(INPUT_POST, 'precio_kilo', FILTER_VALIDATE_FLOAT);
@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($nombre_corte && $id_tipo && $precio_kilo !== false && $stock_kg !== false) {
         try {
-            // Manejo de imagen
+
             $imagen = null;
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                // Sanitizar nombre del producto para el archivo
+
                 $nombreSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $nombre_corte)));
                 $extension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
                 $nombreArchivo = uniqid() . "_" . $nombreSlug . "." . $extension;

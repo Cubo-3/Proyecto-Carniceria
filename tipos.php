@@ -1,15 +1,15 @@
 <?php
-// tipos.php
+
 session_start();
 require_once 'includes/db.php';
 
-// Seguridad: Verificar si el usuario está logueado
+
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-// Obtener todos los tipos de productos con el conteo de productos
+
 try {
     $stmt = $pdo->query("
         SELECT t.*, COUNT(p.id) as cantidad 

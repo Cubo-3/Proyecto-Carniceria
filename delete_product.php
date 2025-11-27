@@ -1,5 +1,5 @@
 <?php
-// delete_product.php
+
 session_start();
 require_once 'includes/db.php';
 
@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
             exit;
 
         } catch (PDOException $e) {
-            // Manejo de error de integridad referencial (si hubiera ventas asociadas, por ejemplo)
+
             if ($e->getCode() == '23000') {
                 header('Location: dashboard.php?error=No se puede eliminar el producto porque tiene registros asociados');
             } else {

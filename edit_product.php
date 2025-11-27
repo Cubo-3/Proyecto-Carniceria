@@ -1,5 +1,5 @@
 <?php
-// edit_product.php
+
 session_start();
 require_once 'includes/db.php';
 
@@ -14,12 +14,12 @@ $tipos = [];
 
 if ($id) {
     try {
-        // Obtener datos del producto
+
         $stmt = $pdo->prepare("SELECT * FROM productos WHERE id = :id");
         $stmt->execute([':id' => $id]);
         $producto = $stmt->fetch();
 
-        // Obtener tipos para el select
+
         $stmtTypes = $pdo->query("SELECT * FROM tipos_productos");
         $tipos = $stmtTypes->fetchAll();
 
@@ -33,7 +33,7 @@ if (!$producto) {
     exit;
 }
 
-// Procesar actualización
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre_corte = trim($_POST['nombre_corte']);
     $id_tipo = filter_input(INPUT_POST, 'id_tipo', FILTER_VALIDATE_INT);
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($nombre_corte && $id_tipo && $precio_kilo !== false && $stock_kg !== false) {
         try {
-            // Manejo de imagen
+
             $imagen = null;
             $sql_imagen = "";
             $params = [
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                // Sanitizar nombre del producto para el archivo
+
                 $nombreSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $nombre_corte)));
                 $extension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
                 $nombreArchivo = uniqid() . "_" . $nombreSlug . "." . $extension;
@@ -72,9 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $sql_imagen = ", imagen = :imagen";
                         $params[':imagen'] = $imagen;
 
-                        // Opcional: Eliminar imagen anterior si existe
-                        // $stmtOld = $pdo->prepare("SELECT imagen FROM productos WHERE id = :id");
-                        // ...
+
                     }
                 }
             }

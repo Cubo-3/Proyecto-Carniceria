@@ -1,15 +1,15 @@
 <?php
-// dashboard.php
+
 session_start();
 require_once 'includes/db.php';
 
-// Seguridad: Verificar si el usuario está logueado
+
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-// Obtener productos con el nombre del tipo
+
 try {
     $tipo_id = isset($_GET['tipo_id']) ? (int)$_GET['tipo_id'] : null;
     $filtro_nombre = "";
@@ -31,7 +31,7 @@ try {
     if ($tipo_id) {
         $stmt->bindParam(':tipo_id', $tipo_id);
         
-        // Obtener nombre del tipo para el título
+
         $stmtTipo = $pdo->prepare("SELECT nombre FROM tipos_productos WHERE id = :id");
         $stmtTipo->execute([':id' => $tipo_id]);
         $tipoData = $stmtTipo->fetch();
@@ -43,7 +43,7 @@ try {
     $stmt->execute();
     $productos = $stmt->fetchAll();
 
-    // Obtener tipos para el modal de agregar
+
     $stmtTypes = $pdo->query("SELECT * FROM tipos_productos");
     $tipos = $stmtTypes->fetchAll();
 

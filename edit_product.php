@@ -118,12 +118,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="card-body">
                         <?php if (isset($error)): ?>
-                            <div class="alert alert-danger"><?php echo $error; ?></div>
+                            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
                         <?php endif; ?>
 
-                        <form action="edit_product.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <form action="edit_product.php?id=<?php echo htmlspecialchars($id); ?>" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="id" value="<?php echo htmlspecialchars($producto['id']); ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                             
                             <div class="mb-3">
                                 <label for="nombre_corte" class="form-label">Nombre del Corte</label>
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="id_tipo" class="form-label">Tipo de Carne</label>
                                 <select class="form-select" id="id_tipo" name="id_tipo" required>
                                     <?php foreach ($tipos as $tipo): ?>
-                                        <option value="<?php echo $tipo['id']; ?>" <?php echo $tipo['id'] == $producto['id_tipo'] ? 'selected' : ''; ?>>
+                                        <option value="<?php echo htmlspecialchars($tipo['id']); ?>" <?php echo $tipo['id'] == $producto['id_tipo'] ? 'selected' : ''; ?>>
                                             <?php echo htmlspecialchars($tipo['nombre']); ?>
                                         </option>
                                     <?php endforeach; ?>
@@ -156,11 +156,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="precio_kilo" class="form-label">Precio por Kilo</label>
-                                    <input type="number" step="0.01" class="form-control" id="precio_kilo" name="precio_kilo" value="<?php echo $producto['precio_kilo']; ?>" required>
+                                    <input type="number" step="0.01" class="form-control" id="precio_kilo" name="precio_kilo" value="<?php echo htmlspecialchars($producto['precio_kilo']); ?>" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="stock_kg" class="form-label">Stock (Kg)</label>
-                                    <input type="number" step="0.001" class="form-control" id="stock_kg" name="stock_kg" value="<?php echo $producto['stock_kg']; ?>" required>
+                                    <input type="number" step="0.001" class="form-control" id="stock_kg" name="stock_kg" value="<?php echo htmlspecialchars($producto['stock_kg']); ?>" required>
                                 </div>
                             </div>
 

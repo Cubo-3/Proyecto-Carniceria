@@ -29,20 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $rutaDestino = "uploads/" . $nombreArchivo;
                 
                 $permitidos = ['jpg', 'jpeg', 'png', 'webp'];
-                $mimePermitidos = ['image/jpeg', 'image/png', 'image/webp'];
                 
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_file($finfo, $_FILES['imagen']['tmp_name']);
-                finfo_close($finfo);
-                
-                $maxSize = 5 * 1024 * 1024;
-                
-                if (in_array($extension, $permitidos) === true && 
-                    in_array($mimeType, $mimePermitidos) === true &&
-                    $_FILES['imagen']['size'] <= $maxSize &&
-                    is_uploaded_file($_FILES['imagen']['tmp_name']) === true) {
-                    
-                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino) === true) {
+                if (in_array($extension, $permitidos) === true) {
+                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino)) {
                         $imagen = $nombreArchivo;
                     }
                 }

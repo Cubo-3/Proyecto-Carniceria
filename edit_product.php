@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':id' => $id_prod
             ];
 
-            if (isset($_FILES['imagen']) === true && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
 
                 $nombreSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $nombre_corte)));
                 $extension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
@@ -73,20 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $rutaDestino = "uploads/" . $nombreArchivo;
                 
                 $permitidos = ['jpg', 'jpeg', 'png', 'webp'];
-                $mimePermitidos = ['image/jpeg', 'image/png', 'image/webp'];
                 
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_file($finfo, $_FILES['imagen']['tmp_name']);
-                finfo_close($finfo);
-                
-                $maxSize = 5 * 1024 * 1024;
-                
-                if (in_array($extension, $permitidos) === true && 
-                    in_array($mimeType, $mimePermitidos) === true &&
-                    $_FILES['imagen']['size'] <= $maxSize &&
-                    is_uploaded_file($_FILES['imagen']['tmp_name']) === true) {
-                    
-                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino) === true) {
+                if (in_array($extension, $permitidos)) {
+                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino)) {
                         $imagen = $nombreArchivo;
                         $sql_imagen = ", imagen = :imagen";
                         $params[':imagen'] = $imagen;

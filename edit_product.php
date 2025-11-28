@@ -8,6 +8,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $producto = null;
 $tipos = [];
@@ -35,6 +39,9 @@ if (!$producto) {
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Error de validación CSRF");
+    }
     $nombre_corte = trim($_POST['nombre_corte']);
     $id_tipo = filter_input(INPUT_POST, 'id_tipo', FILTER_VALIDATE_INT);
     $precio_kilo = filter_input(INPUT_POST, 'precio_kilo', FILTER_VALIDATE_FLOAT);
@@ -115,6 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <form action="edit_product.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                             
                             <div class="mb-3">
                                 <label for="nombre_corte" class="form-label">Nombre del Corte</label>

@@ -3,15 +3,15 @@
 session_start();
 require_once __DIR__ . '/includes/db.php';
 
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+if (isset($_SESSION['logged_in']) !== true || $_SESSION['logged_in'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) === true) {
     $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    if ($id) {
+    if (empty($id) === false) {
         try {
             $stmt = $pdo->prepare("DELETE FROM productos WHERE id = :id");
             $stmt->execute([':id' => $id]);
@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
 
         } catch (PDOException $e) {
 
-            if ($e->getCode() == '23000') {
+            if ($e->getCode() === '23000') {
                 header('Location: dashboard.php?error=No se puede eliminar el producto porque tiene registros asociados');
             } else {
                 error_log("Error al eliminar: " . $e->getMessage());

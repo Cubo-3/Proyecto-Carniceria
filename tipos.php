@@ -20,7 +20,7 @@ try {
     ");
     $tipos = $stmt->fetchAll();
 } catch (PDOException $e) {
-    $error = "Error al cargar los tipos: " . $e->getMessage();
+    $internal_error = "Error al cargar los tipos: " . $e->getMessage();
 }
 ?>
 <!DOCTYPE html>
@@ -55,14 +55,39 @@ try {
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Tipos de Carne</h1>
-            <a href="dashboard.php" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Volver al Dashboard
-            </a>
+            <div>
+                <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#addTypeModal">
+                    <i class="bi bi-plus-circle"></i> Agregar Nuevo Tipo
+                </button>
+                <a href="dashboard.php" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver al Dashboard
+                </a>
+            </div>
         </div>
 
-        <?php if (isset($error)): ?>
+        <?php 
+        $msg = filter_input(INPUT_GET, 'msg', FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($msg): 
+        ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $msg; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <?php 
+        $error = filter_input(INPUT_GET, 'error', FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($error): 
+        ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php echo $error; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($internal_error)): ?>
             <div class="alert alert-danger" role="alert">
-                <?php echo htmlspecialchars($error); ?>
+                <?php echo htmlspecialchars($internal_error); ?>
             </div>
         <?php endif; ?>
 
@@ -90,8 +115,11 @@ try {
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="dashboard.php?tipo_id=<?php echo $tipo['id']; ?>" class="btn btn-sm btn-outline-danger">
-                                                Ver Productos <i class="bi bi-arrow-right"></i>
+                                            <a href="dashboard.php?tipo_id=<?php echo $tipo['id']; ?>" class="btn btn-sm btn-outline-primary" title="Ver Productos">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="delete_type.php?id=<?php echo $tipo['id']; ?>" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este tipo de carne?');">
+                                                <i class="bi bi-trash"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -104,6 +132,30 @@ try {
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Agregar Tipo -->
+    <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="addTypeModalLabel">Nuevo Tipo de Carne</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="save_type.php" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Tipo</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Ej: Pescado">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Guardar Tipo</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

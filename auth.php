@@ -10,8 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
-    if (!empty($email) && !empty($password)) {
-        try {
+    if (empty($email) === true && empty($password) === true) {
+    try {
+
 
             $stmt = $pdo->prepare("SELECT id, nombre, password, rol FROM usuarios WHERE email = :email LIMIT 1");
             $stmt->bindParam(':email', $email);

@@ -1,26 +1,26 @@
 <?php
 
 session_start();
-require_once __DIR__ . '/includes/db.php';
+require_once 'includes/db.php';
 
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+if (isset($_SESSION['logged_in']) !== true || $_SESSION['logged_in'] !== true) {
     header('Location: login.php');
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $nombre_corte = trim($_POST['nombre_corte']);
+    $nombre_corte = filter_input(INPUT_POST, 'nombre_corte', FILTER_SANITIZE_SPECIAL_CHARS);
     $id_tipo = filter_input(INPUT_POST, 'id_tipo', FILTER_VALIDATE_INT);
     $precio_kilo = filter_input(INPUT_POST, 'precio_kilo', FILTER_VALIDATE_FLOAT);
     $stock_kg = filter_input(INPUT_POST, 'stock_kg', FILTER_VALIDATE_FLOAT);
-    $descripcion = trim($_POST['descripcion']);
+    $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if ($nombre_corte && $id_tipo && $precio_kilo !== false && $stock_kg !== false) {
+    if (empty($nombre_corte) === false && empty($id_tipo) === false && $precio_kilo !== false && $stock_kg !== false) {
         try {
 
             $imagen = null;
-            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            if (isset($_FILES['imagen']) === true && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
 
                 $nombreSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $nombre_corte)));
                 $extension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $permitidos = ['jpg', 'jpeg', 'png', 'webp'];
                 
-                if (in_array($extension, $permitidos)) {
+                if (in_array($extension, $permitidos) === true) {
                     if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino)) {
                         $imagen = $nombreArchivo;
                     }

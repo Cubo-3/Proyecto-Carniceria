@@ -39,7 +39,8 @@ if (!$producto) {
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    $csrf_token = filter_input(INPUT_POST, 'csrf_token', FILTER_DEFAULT);
+    if (!$csrf_token || $csrf_token !== $_SESSION['csrf_token']) {
         die("Error de validación CSRF");
     }
     $nombre_corte = trim($_POST['nombre_corte']);

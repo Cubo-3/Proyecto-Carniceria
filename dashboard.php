@@ -11,7 +11,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 
 try {
-    $tipo_id = isset($_GET['tipo_id']) ? (int)$_GET['tipo_id'] : null;
+    $tipo_id = filter_input(INPUT_GET, 'tipo_id', FILTER_VALIDATE_INT);
     $filtro_nombre = "";
 
     $sql = "
@@ -159,16 +159,22 @@ try {
             </button>
         </div>
 
-        <?php if (isset($_GET['msg'])): ?>
+        <?php 
+        $msg = filter_input(INPUT_GET, 'msg', FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($msg): 
+        ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <?php echo htmlspecialchars($_GET['msg']); ?>
+                <?php echo $msg; ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>
 
-        <?php if (isset($_GET['error'])): ?>
+        <?php 
+        $error = filter_input(INPUT_GET, 'error', FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($error): 
+        ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <?php echo htmlspecialchars($_GET['error']); ?>
+                <?php echo $error; ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>

@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
-    if (!empty($email) === true && !empty($password) === true) {
+    if (empty($email) === true && empty($password) === true) {
     try {
 
 
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
 
 
-            if (!empty($user) === true && (password_verify($password, $user['password']) === true || md5($password) === $user['password'])) {
+            if ($user && (password_verify($password, $user['password']) || md5($password) === $user['password'])) {
                 
 
                 session_regenerate_id(true);

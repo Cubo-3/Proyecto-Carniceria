@@ -1,4 +1,5 @@
  Proyecto Web de Calidad de Software: Gestión de Carnicería
+ 
  Descripción del Proyecto
 
 Pagina web funcional para la administración de una carnicería, implementando un crud completo que permite la gestión del inventario.

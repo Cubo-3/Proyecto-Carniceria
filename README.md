@@ -1,13 +1,12 @@
  Proyecto Web de Calidad de Software: Gestión de Carnicería
  Descripción del Proyecto
 
-La aplicación es un sistema web funcional para la administración de una carnicería, implementando un crud completo que permite la gestión del inventario.
+Pagina web funcional para la administración de una carnicería, implementando un crud completo que permite la gestión del inventario.
 
  Tecnologías Utilizadas
 Lenguaje: PHP 
 
 Base de Datos: MySQL / MariaDB
-
 
 Librería de BD: PDO 
 
